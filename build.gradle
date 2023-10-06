@@ -1,0 +1,114 @@
+/* querydsl 추가한 후 clean 후 compilejava 실행
+    build 에 QEntity 있는지 확인 */
+
+// querydsl 추가
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.2'
+    id 'io.spring.dependency-management' version '1.1.2'
+    id 'org.hibernate.orm' version '6.2.6.Final'
+    id 'org.graalvm.buildtools.native' version '0.9.23'
+}
+
+group = 'com.teamntp'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // thymeleaf-extras-springsecurity6: Thymeleaf에서 Spring Security를 이용하기 위해 필요한 라이브러리
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    // validation 추가
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // querydsl 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+    annotationProcessor(
+
+            "jakarta.persistence:jakarta.persistence-api",
+
+            "jakarta.annotation:jakarta.annotation-api",
+
+            "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
+
+    // test 환경 Lombok @Log4j 설정
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // noh
+    //Flying Saucer PDF Rendering(OpenPDF) 및 Apache Commons IO 종속성
+    implementation group: 'org.xhtmlrenderer', name: 'flying-saucer-pdf-openpdf', version: '9.1.22'
+
+    // PdfHTML » 3.0.3
+    implementation group: 'com.itextpdf', name: 'html2pdf', version: '3.0.3'
+    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.4'
+    // https://mvnrepository.com/artifact/com.itextpdf.tool/xmlworker
+    implementation group: 'com.itextpdf.tool', name: 'xmlworker', version: '5.5.4'
+    // https://mvnrepository.com/artifact/com.itextpdf/itext-asian
+    implementation group: 'com.itextpdf', name: 'itext-asian', version: '5.2.0'
+
+    // jin - modelmapper
+    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.1'
+//    implementation 'org.modelmapper:modelmapper-module-java8:1.2.3'
+
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20230618'
+
+
+}
+
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}
+
+hibernate {
+    enhancement {
+        enableAssociationManagement = true
+    }
+}
+
+// querydsl 추가
+// /build/generated
+// /build/classes 로 변경
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["$projectDir/src/main/java", "$projectDir/build/classes"]
+        }
+    }
+}
+
+compileJava.dependsOn('clean')

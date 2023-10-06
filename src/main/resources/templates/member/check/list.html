@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>check</title>
+</head>
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+  <th:block th:fragment="content">
+    <h1 class="mt-4 fw-bold h3">사유서
+      <span>
+        <a th:href="@{/member/check/CWriteForm}"
+           class="btn btn-outline-primary">Register</a>
+      </span>
+    </h1>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>순번</th>
+        <th>사유서</th>
+        <th>다운로드</th>
+        <th>작성일자</th>
+        <th>승인상태</th>
+        <th>삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each=" citem: ${clist}">
+        <td th:text="${citem.cid}"></td>
+        <td th:text="${citem.title}">
+        <td>
+          <a th:href="@{/member/check/download(filename=${citem.filePath})}"
+             class="btn btn-outline-primary"
+             th:text="|${'다운로드'}|">다운로드</a>
+        </td>
+        <td th:text="${#temporals.format(citem.createDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td>
+          <button type="button" class="btn btn-outline-primary approval-btn" data-id="${citem.cid}">승인대기</button>
+        </td>
+        <td>
+          <!--        <button type="button" class="btn btn-outline-danger delete-btn" data-id="${citem.cid}">삭제</button>-->
+          <a th:href="@{/member/check/Delete(cid=${citem.cid})}"
+             class="btn btn-outline-danger delete-btn">삭제</a>
+
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+  </th:block>
+</th:block>
+
+<script th:inline="javascript">
+  $(document).ready(function () {
+    $('.approval-btn').click(function () {
+      var button = $(this);
+      var cid = button.data('id');
+      if (button.text() === '승인대기') {
+        button.text('승인완료');
+      } else {
+        button.text('승인대기');
+      }
+    });
+  });
+
+</script>
+
+</html>
+

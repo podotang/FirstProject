@@ -1,0 +1,10 @@
+<form class="container-fluid text-center" action="/member/student/register" method="post">
+  <div class="input-group-prepend">
+    <select class="form" th:each="${result}" name="courseList">
+      <option th:selected="${result.courseIdx == null}">수강 중인 과정을 선택하세요.</option>
+      <option th:value="${result.courseIdx}" th:selected="${result.courseIdx}">
+        [[${dto.courseName}]]([[${dto.startDate}]]~[[${dto.endDate}]])
+      </option>
+    </select>
+    <button class="btn btn-primary" type="submit">등록</button>
+  </div>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/saeil.ico">
+    <title>회원가입(정보입력)</title>
+    <head th:replace="~{/frags/import::importfrag}"></head>
+    <script th:src="@{/js/regexp.js}"></script>
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+        background-color: #fafafa;
+        padding-top: 70px;
+    }
+
+    .form-signup {
+        max-width: 400px;
+        padding: 1rem;
+    }
+
+    .form-signup .form-floating:focus-within {
+        z-index: 2;
+    }
+
+    .form-signup input[name="loginId"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        height: 45px;
+    }
+
+    .form-signup input[name="password"] {
+        margin-bottom: -1px;
+        border-radius: 0px 0px;
+        height: 45px;
+    }
+
+    .form-signup input[name="passwordCheck"] {
+        margin-bottom: -1px;
+        border-radius: 0px 0px;
+        height: 45px;
+    }
+
+    .form-signup input[name="name"] {
+        margin-bottom: -1px;
+        border-radius: 0px 0px;
+        height: 45px;
+    }
+
+    .form-signup input[name="mobileNo"] {
+        margin-bottom: -1px;
+        border-radius: 0px 0px;
+        height: 45px;
+    }
+
+    .form-signup input[name="email"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        height: 45px;
+    }
+
+    .form-signup input[name="zipcode"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        height: 45px;
+    }
+
+    .form-signup input[name="address"] {
+        margin-bottom: -1px;
+        border-radius: 0px 0px;
+        height: 45px;
+    }
+
+    .form-signup input[name="detailAddress"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        height: 45px;
+    }
+
+    .btn {
+        border-radius: 3px 3px !important;
+    }
+
+    /* input box color, google 자동완성 배경 삭제 */
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 30px #fff inset;
+        -webkit-text-fill-color: #000;
+    }
+
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+</style>
+<body>
+
+<main class="form-signup container w-100 m-auto">
+    <form th:action="@{/signup}" th:object="${memberSignUpDTO}" method="post">
+        <h1 class="h3 mb-4 fw-normal text-center">회원 정보를 입력해 주세요.</h1>
+
+        <!--path, type 함께 전송-->
+        <input type="hidden" th:field="*{path}" th:name="path">
+        <input type="hidden" th:field="*{type}" th:name="type">
+
+        <!-- 오류 출력 부분-->
+        <div th:replace="~{/layout/formErrors :: formErrorsFragment}"></div>
+
+        <!-- loginId -->
+        <div>
+            <input class="form-control form-floating" type="text" name="loginId" maxlength="15" id="loginId"
+                   placeholder="아이디" th:field="*{loginId}">
+        </div>
+
+        <!-- password -->
+        <div>
+            <input class="form-control form-floating" type="password" name="password" maxlength="15" id="password"
+                   placeholder="비밀번호" th:field="*{password}">
+        </div>
+
+        <!-- password check -->
+        <div>
+            <input class="form-control form-floating" type="password" name="passwordCheck" maxlength="15"
+                   id="passwordCheck"
+                   placeholder="비밀번호확인" th:field="*{passwordCheck}">
+        </div>
+        <!-- name -->
+        <div>
+            <input class="form-control form-floating" type="text" name="name" maxlength="10" id="name"
+                   placeholder="이름" th:field="*{name}">
+        </div>
+
+        <!-- mobileNo -->
+        <div>
+            <input class="form-control form-floating" type="text" name="mobileNo" maxlength="12" id="mobileNo"
+                   placeholder="휴대전화번호"
+                   th:field="*{mobileNo}">
+        </div>
+
+        <!-- email -->
+        <div class="mb-3">
+            <input class="form-control form-floating" type="email" name="email" maxlength="50" id="email"
+                   placeholder="e-mail"
+                   th:field="*{email}">
+        </div>
+
+        <!-- address -->
+        <div>
+            <label class="m-sm-1">주소</label>
+            <button class="btn btn-outline-dark btn-sm m-sm-1" type="button" onclick="DaumPostcode()">검색</button>
+            <input class="form-control form-floating disabled mt-3" type="text" name="zipcode" maxlength="5"
+                   id="zipcode" placeholder="우편번호" readonly>
+            <input class="form-control form-floating disabled" type="text" name="address" maxlength="100" id="address"
+                   placeholder="주소" readonly>
+            <input class="form-control form-floating mb-4" type="text" name="detailAddress" maxlength="100"
+                   id="detailAddress" placeholder="상세주소">
+        </div>
+
+        <p class="text-center">
+            <button type="submit" class="btn btn-primary me-2 fw-bolder text-white">가입</button>
+            <button class="btn btn-outline-dark fw-bolder" type="button" onclick="location.replace('/login')">취소</button>
+        </p>
+
+    </form>
+</main>
+
+</body>
+</html>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:src="@{/js/daumPost.js}"></script>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1 class="mt-4 fw-bold h3">공지사항 등록</h1>
+
+        <!--등록 화면 START-->
+        <form th:action="@{/member/board/register}" th:method="post">
+
+            <!--Title-->
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" name="title" placeholder="Enter Title">
+            </div>
+
+            <!--Content-->
+            <div class="form-group">
+                <label>Content</label>
+                <textarea class="form-control" name="content" rows="5"></textarea>
+            </div>
+
+            <!--todo Writer-->
+
+            <!--Submit Button-->
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+        </form>
+        <!--등록 화면 END-->
+
+    </th:block>
+</th:block>
+</html>

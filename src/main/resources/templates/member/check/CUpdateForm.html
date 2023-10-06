@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update</title>
+</head>
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <div class="container">
+            <h1 class="mt-4 fw-bold h3">사유서 수정</h1>
+            <form method="post" th:action="@{/member/check/CUpdateForm}" th:object="${checkDto}">
+                <input type="hidden" th:field="*{idx}">
+                <label>제목</label>
+                <input type="text" name="title"
+                       class="form-control mb-3"
+                       th:field="*{title}"
+                       th:classappend="${#fields.hasErrors('title')}? 'is-invalid' "/>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                </div>
+                <div class="text-end">
+                    <input type="submit" class="btn btn-primary" value="저장"/>
+                </div>
+            </form>
+        </div>
+    </th:block>
+</th:block>
+</html>
+

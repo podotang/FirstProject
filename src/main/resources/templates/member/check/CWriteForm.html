@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title>WriteForm</title>
+</head>
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <div class="container">
+            <h1 class="mt-4 fw-bold h3">사유서 등록</h1>
+            <form method="post" th:action="@{/member/check/CWriteForm}" th:object="${checkDTO}" enctype="multipart/form-data">
+                <label>Title</label>
+                <input type="text" name="title"
+                       class="form-control mb-3"
+                       th:field="*{title}"
+                       th:classappend="${#fields.hasErrors('title')}? 'is-invalid' "/>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                </div>
+                <input type="file" name="file" accept=".txt,.pdf,.doc,.docx,.hwp">
+                <div class="text-end">
+                    <input type="submit" class="btn btn-primary" value="Save"/>
+                </div>
+                <p th:text="${message}" th:if="${message}" class="m-3 alert alert-danger"></p>
+            </form>
+        </div>
+    </th:block>
+</th:block>
+</html>

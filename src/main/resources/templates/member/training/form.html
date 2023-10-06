@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <style>
+            h1 {
+                font-weight: bold;
+                color: black;
+                text-align: center;
+                letter-spacing: 20px;
+            }
+
+            .button_two{
+                text-align: center;
+                margin: 10px;
+            }
+
+            /*table{*/
+            /*    border: 1px solid black;*/
+            /*    border-collapse: collapse;*/
+            /*}*/
+            /*마진 20추가하니깐 왼쪽으로 감 */
+
+            .a4 {
+                background: white;
+                width: 190mm;
+                height: 270mm;
+                display: block;
+                /*padding: 1.5cm 1.5cm 2cm 1.5cm;*/
+            }
+
+            .title {
+                width: 19cm;
+                height: 100px;
+                text-align: center;
+            }
+
+
+            /* 훈련일지 css */
+            .training-sign {
+                width: 5cm;
+                text-align: center;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            .training-sign th {
+                align-content: center;
+                width: 60px;
+                height: 20px;
+                border: 1px solid black;
+                border-collapse: collapse;
+                background-color: #ececec;
+            }
+
+            .training-sign td {
+                align-content: center;
+                weight: 70px;
+                height: 50px;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            /* 훈련일지 목록 css */
+            .form-row2{
+                margin-top: 5px;
+                margin-bottom: 15px;
+                width: 19cm;
+            }
+
+            .training-total th{
+                text-align: center;
+                width: 60px;
+                height: 40px;
+                border: 1px solid black;
+                border-collapse: collapse;
+                background-color: #ececec;
+            }
+
+            .training-total td{
+                margin-top: 15px;
+                height: 40px;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            /* 훈련일지 내용 css */
+            .form-row3{
+                width: 19cm;
+            }
+
+            .content {
+                border: 1px solid black;
+                border-collapse: collapse;
+                border-bottom-style: double;
+            }
+
+            .training-content {
+                text-align: center;
+                height: 45px;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            .training-content th {
+                border: 1px solid black;
+                border-collapse: collapse;
+                text-align: center;
+                background-color: #ececec;
+            }
+
+            .training-content-period {
+                width: 50px;
+            }
+
+            .training-content-course {
+                width: 130px;
+            }
+
+            .training-content-teacher {
+                width: 100px;
+            }
+
+            .training-content-tc {
+                width: auto;
+            }
+
+
+            .training-time {
+                width: 19cm;
+                border: 1px solid black;
+            }
+
+
+            #tcPeriod01 .training-content {
+                /*교시 훈련과목 담당강사 훈련내용*/
+                border-top: black double 5px;
+            }
+
+            .training-content2 {
+                text-align: center;
+                height: 40px;
+                border: 1px solid black;
+            }
+
+            .training-content2-c {
+                width: 50px;
+                border: 1px solid black;
+                background-color: #ececec;
+                text-align: center;
+            }
+
+            .training-content2-t {
+                /*전문,소양,취업,기타,계*/
+                width: 50px;
+                height: 35px;
+                border: 1px solid black;
+            }
+
+            .training-content3-c {
+                /* c::훈련과목이랑 같은 라인*/
+                width: 130px;
+                background-color: #ececec;
+                border: 1px solid black;
+                text-align: center;
+            }
+
+            .training-content3 {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            .training-content3-t {
+                /*특이사항*/
+                width: 50px;
+                height: 150px;
+                text-align: center;
+                border: 1px solid black;
+                border-collapse: collapse;
+                background-color: #ececec;
+                writing-mode: vertical-rl;
+            }
+
+            .training-content3 td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            #training-etc {
+                border-top: black double 5px;
+            }
+
+            #tcPeriod07 {
+                border-bottom: black double 5px;
+            }
+
+            input {
+                width : 100%;
+                height: 100%;
+                font-size: 15px;
+                border: none; /*테두리 없애기*/
+                background: transparent; /*배경 투명*/
+                text-align: center;
+            }
+
+            /*
+            th:text="${}"
+            th:href="@{}"
+            th:with="${}"
+            th:value="${}"
+            */
+
+
+        </style>
+
+        <div class="search_reserve"> </div>
+        <div class="mt-lg-5 a4" name="a4">
+            <form method="post" th:action="@{/member/training/form}" th:object="${trainingDTO}">
+                <!--<div class="button_two">
+                    <input type="submit" value="저장" class="btn btn-primary" style="width: 100px">
+                    <a th:href="@{/member/training/downloadReceipt}" class="btn btn-primary">다운로드</a>
+                    <div style="height: 50px;"></div>
+                </div>-->
+                <div class="title">
+                    <h1 align="center"><b>훈 련 일 지</b></h1>
+                </div>
+                <div class="sign" style="height: 120px; width: 19cm;">
+                    <table class="training-sign" id="training-sign" align="right">
+                        <thead>
+                        <th class="training-sign">관 장</th>
+                        <th class="training-sign">실무자</th>
+                        <th class="training-sign">지도자</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="training-sign"></td>
+                            <td class="training-sign"></td>
+                            <td class="training-sign"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-row" style="height: 160px;">
+                    <table class="training-list" align="left">
+                                        <tr class="training-list">
+                                            <h4><span class="space">사업명 : 새일센터 직업교육훈련</span></h4></tr>
+                                        <tr class="training-list">
+                                            <h4><span class="space2">기관명 : 대구여성인력개발센터 대구남부여성새로일하기센터</span></h4></tr>
+
+                                        <tr class="training-list">
+                                            <h4><span class="space3">과정명 :</span><label for="schDt"></label>
+                                                <select name="training-schDt" id="schDt" class="training-schDt" style="height: 25px; font-size: large">
+                                                    <th:block th:each="course : ${courseList}">
+                                                        <option th:value="${course.courseIdx}">
+                                                            [[${course.courseName}]]([[${course.startDate}]]~[[${course.endDate}]])
+                                                        </option>
+                                                    </th:block>
+                                                </select>
+                                              </h4>
+                                        <tr class="training-list">
+                                            <h4>
+                                                <span class="space4" th:text="${formattedDate}"></span>
+                                                ( <span id="days">총수업</span>일 / 총 <span id="hours">총수업</span>시간)</h4>
+                                        </tr>
+                                    </table>
+                </div>
+                <!--  DB값 저장 후 보여주기 -->
+                <div class="form-row2">
+                    <table class="training-total" style="width: 19cm;">
+                        <tr class="training-total">
+                            <th class="training-total" id="jaejuk">재적</th>
+                            <td class="training-total" style="border-right: none;">
+                                <input type="text" th:field="*{jaejuk}"/>
+                            </td>
+                            <td style="border-left: none; text-align: center;">명&nbsp;</td>
+                            <th class="training-total" id="attend">출석</th>
+                            <td class="training-total" style="border-right: none;">
+                                <input type="text" th:field="*{attend}"/>
+                            </td>
+                            <td style="border-left: none; text-align: center;">명&nbsp;</td>
+                            <th class="training-total" id="miss">결석</th>
+                            <td class="training-total" style="border-right: none;">
+                                <input type="text" th:field="*{miss}"/>
+                            </td>
+                            <td style="border-left: none; text-align: center;">명&nbsp;</td>
+                            <th class="training-total" id="late">지각</th>
+                            <td class="training-total" style="border-right: none;">
+                                <input type="text" th:field="*{late}"/>
+                            </td>
+                            <td style="border-left: none; text-align: center;">명&nbsp;</td>
+                            <th class="training-total" id="early">조퇴</th>
+                            <td class="training-total" style="border-right: none;">
+                                <input type="text" th:field="*{early}"/>
+                            </td>
+                            <td style="border-left: none; text-align: center;">명&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-row3">
+                    <table class="content" style="width: 19cm;">
+                        <tr class="training-content" id="tc_title">
+                            <th class="training-content-period" id="period">교시</th>
+                            <th class="training-content-course" id="course">훈련과목</th>
+                            <th class="training-content-teacher" id="teacher">담당강사</th>
+                            <th class="training-content-tc" id="tc">훈&nbsp; 련&nbsp; 내&nbsp; 용</th>
+                        </tr>
+                        <tr class="training-content" id="tcPeriod01">
+                            <td class="training-content" id="period01">1</td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingCourse1}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingTeacher1}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingContent1}"/>
+                            </td>
+                        </tr>
+                        <tr class="training-content" id="tcPeriod02">
+                            <td class="training-content" id="period02">2</td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingCourse2}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingTeacher2}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingContent2}"/>
+                            </td>
+                        </tr>
+                        </tr>
+                        <tr class="training-content" id="tcPeriod03">
+                            <td class="training-content" id="period03">3</td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingCourse3}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingTeacher3}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingContent3}"/>
+                            </td>
+                        </tr>
+                        <tr class="training-content" id="tcPeriod04">
+                            <td class="training-content" id="period04">4</td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingCourse4}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingTeacher4}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingContent4}"/>
+                            </td>
+                        </tr>
+                        <tr class="training-content" id="tcPeriod05">
+                            <td class="training-content" id="period05">5</td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingCourse5}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingTeacher5}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingContent5}"/>
+                            </td>
+                        </tr>
+                        <tr class="training-content" id="tcPeriod06">
+                            <td class="training-content" id="period06">6</td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingCourse6}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingTeacher6}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingContent6}"/>
+                            </td>
+                        </tr>
+                        <tr class="training-content" id="tcPeriod07">
+                            <td class="training-content" id="period07">7</td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingCourse7}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingTeacher7}"/>
+                            </td>
+                            <td class="training-content" type="text">
+                                <input type="text" th:field="*{trainingContent7}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-row4" style="width: 19cm;">
+                    <table class="training-time" id="training-time">
+                        <tr class="training-content2" id="training-time1">
+                            <th rowspan="2" class="training-content2-c">훈련시간</th>
+                            <th class="training-content2-c">일 계</th>
+                            <th class="training-content2-t">전문</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">소양</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">취업</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">기타</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">계</th>
+                            <td class="training-content2"></td>
+                        </tr>
+                        <tr class="training-content2" id="training-time2">
+                            <th class="training-content2-c">일 계</th>
+                            <th class="training-content2-t">전문</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">소양</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">취업</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">기타</th>
+                            <td class="training-content2"></td>
+                            <th class="training-content2-t">계</th>
+                            <td class="training-content2"></td>
+                        </tr>
+                        <tr class="training-content3" id="training-etc">
+                            <th rowspan="4" class="training-content3-t" style="writing-mode: vertical-rl;">특기사항</th>
+                            <th class="training-content3-c">결석자</th>
+                            <td colspan="10" class="training-content3"></td>
+                        </tr>
+                        <tr class="training-content3" id="training-etc2">
+                            <th class="training-content3-c">지각자</th>
+                            <td colspan="10" class="training-content3"></td>
+                        </tr>
+                        <tr class="training-content3" id="training-etc3">
+                            <th class="training-content3-c">조퇴자</th>
+                            <td colspan="10" class="training-content3"></td>
+                        </tr>
+                        <tr class="training-content3" id="training-etc4" style="height: 50px;">
+                            <th class="training-content3-c">전달 및 기타</th>
+                            <td colspan="10" class="training-content3"><input></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="button_two">
+                    <input type="submit" value="저장" class="btn btn-primary" style="width: 100px">
+                    <a th:href="@{/member/training/downloadReceipt}" class="btn btn-primary">다운로드</a>
+                </div>
+            </form>
+        </div>
+        <div style="height: 10cm;"></div>
+
+<!--        <script>-->
+
+<!--             &lt;!&ndash; value값 이용해서 임시 값 가져오기    AJAX &ndash;&gt;-->
+
+<!--             $(document).ready(function () {-->
+<!--                 $('.training-schDt').on('change', function () {-->
+<!--                     var courseIdx = $(this).val(); // ?? 과정번호를 가져오는 코드 맞나?-->
+
+<!--                     var courseId = getCourseIdByCourseIdx(courseIdx);-->
+<!--                     var courseData = getCourseData(courseId);-->
+
+<!--                     $('#days').text(courseData.days);             //totalDate-->
+<!--                     $('#hours').text(courseData.totalHours);    //totalcourseTime-->
+<!--                 });-->
+
+<!--                 function getCourseIdByCourseIdx(courseIdx) {-->
+<!--                     // Implement your logic here to retrieve the corresponding courseId-->
+<!--                     // Return the courseId for the given course-Idx-->
+<!--                     // Example:-->
+<!--                     if (courseIdx === "01") return "1";-->
+<!--                     if (courseIdx === "02") return "2";-->
+<!--                     if (courseIdx === "03") return "3";-->
+<!--                     if (courseIdx === "04") return "4";-->
+<!--                     if (courseIdx === "05") return "5";-->
+<!--                 }-->
+
+<!--                 function getCourseData(courseId) {-->
+<!--                     // Implement your logic here to fetch course data based on the selected courseId-->
+<!--                     // Return an object with formattedDate, duration, days, and totalHours-->
+
+<!--                     // Example data-->
+<!--                     if (courseId === "1") {-->
+<!--                         // 디폴트값으로 뷰에 바로 출력-->
+<!--                         return {-->
+<!--                             days: "140",-->
+<!--                             totalHours: "984"-->
+<!--                         };-->
+<!--                     }-->
+
+<!--                     if (courseId === "2") {-->
+<!--                         return {-->
+<!--                             days: "90",-->
+<!--                             totalHours: "600"-->
+<!--                         };-->
+<!--                     }-->
+
+<!--                     if (courseId === "3") {-->
+<!--                         return {-->
+<!--                             days: "170",-->
+<!--                             totalHours: "1190"-->
+<!--                         };-->
+<!--                     }-->
+
+<!--                     if (courseId === "4") {-->
+<!--                         return {-->
+<!--                             days: "0",-->
+<!--                             totalHours: "0"-->
+<!--                         };-->
+<!--                     }-->
+
+<!--                     if (courseId === "5") {-->
+<!--                         return {-->
+<!--                             days: "0",-->
+<!--                             totalHours: "0"-->
+<!--                         };-->
+<!--                     }-->
+<!--                 }-->
+<!--            });-->
+
+
+<!--        </script>-->
+    </th:block>
+</th:block>
+

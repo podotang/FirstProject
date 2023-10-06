@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+  <th:block th:fragment="content">
+    <div class="container">
+      <h1 class="mt-4 fw-bold h3">훈련 과정 상세보기</h1>
+      <label class="mb-3">과정명</label>
+      <div class="border rounded p-3">
+        <span th:text="${cDTO.courseName}"></span>
+      </div>
+      <!--<label class="my-3">내용</label>
+      <div class="border rounded p-3">
+        <span th:text="${cDTO.courseContent}"></span>
+      </div>-->
+      <div class="my-3 text-end" sec:authorize="hasAnyRole('TEACHER','ADMIN')">
+        <a th:href="@{/course/delete(idx=${cDTO.courseIdx})}" class="btn btn-primary">삭제</a>
+      </div>
+    </div>
+  </th:block>
+</th:block>
+
+</html>
+

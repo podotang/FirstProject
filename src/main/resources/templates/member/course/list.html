@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:replace="~{/layout/basic::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <!--Page Title & Register Button-->
+        <h1 class="mt-4 fw-bold h3">훈련 과정 목록
+            <span sec:authorize="hasAnyRole('TEACHER','ADMIN')">
+                <a th:href="@{/member/course/register}">
+                    <button type="button" class="btn btn-outline-primary">Register</button>
+                </a>
+            </span>
+        </h1>
+
+        <!--Page-->
+        <form action="/member/course/list" method="get" id="searchForm">
+            <input type="hidden" name="page" value="1">
+        </form>
+
+        <!--Course List Start-->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">과정명</th>
+                <th scope="col">교육기간</th>
+                <th scope="col">강의계획서</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="dto : ${result.dtoList}">
+                <!--과정 index-->
+                <th scope="row">
+                    <a th:href="@{/member/course/read(courseIdx=${dto.courseIdx}, page=${result.page})}">
+                        [[${dto.courseIdx}]]
+                    </a>
+                </th>
+                <!--과정명-->
+                <td>
+                    [[${dto.courseName}]]
+                </td>
+                <!--교육기간-->
+                <td>
+                    [[${#temporals.format(dto.startDate, 'yyyy/MM/dd')}]] ~
+                    [[${#temporals.format(dto.endDate, 'yyyy/MM/dd')}]]
+                </td>
+                <!--강의계획서-->
+                <td>
+                    <a th:if="${dto.syllabusDTOList.size()>0&& dto.syllabusDTOList[0].syllabusFilePath !=null}"
+                       th:href="|/display?fileName=${dto.syllabusDTOList[0].getSyllabusURL()}|">
+                        <button type="button" class="btn btn-primary btn-sm fw-bolder text-white">다운로드</button>
+                    </a>
+                </td>
+
+            </tr>
+            </tbody>
+
+        </table>
+        <!--Course List End-->
+
+        <!--page 처리 Start-->
+        <ul class="pagination h-100 justify-content-center align-items-center">
+            <!--이전 페이지 처리-->
+            <li class="page-item" th:if="${result.prev}">
+                <a class="page-link" th:href="@{/member/course/list(page=${result.start -1}
+                , type=${pageRequestDTO.type}
+                , keyword=${pageRequestDTO.keyword})}" tabindex="-1">Previous
+                </a>
+            </li>
+
+            <!--페이지 이동 처리-->
+            <li class="'page-item ' + ${result.page == page ? 'active' : ''} " th:each="page: ${result.pageList}">
+                <a class="page-link" th:href="@{/member/course/list(page=${page}
+                , type=${pageRequestDTO.type}
+                , keyword=${pageRequestDTO.keyword})}">[[${page}]]
+                </a>
+            </li>
+
+            <!--다음 페이지 처리-->
+            <li class="page-item" th:if="${result.next}">
+                <a class="page-link" th:href="@{/member/course/list(page=${result.end +1}
+                , type=${pageRequestDTO.type}
+                , keyword=${pageRequestDTO.keyword})}" tabindex="-1">Next
+                </a>
+            </li>
+        </ul>
+        <!--page 처리 End-->
+
+        <script th:inline="javascript">
+            // 등록 버튼 알림 처리
+        </script>
+
+
+    </th:block>
+</th:block>
+
+</html>

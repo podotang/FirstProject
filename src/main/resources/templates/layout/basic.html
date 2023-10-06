@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko-kr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<th:block th:fragment="setContent(content)">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--csrf-->
+        <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+        <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+        <link rel="shortcut icon" type="image/x-icon" href="/images/saeil.ico">
+
+        <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">
+            여성새로일하기센터 | 교육과정통합관리시스템
+        </title>
+        <!-- Bootstrap core CSS -->
+        <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link th:href="@{/css/font_import.css}" rel="stylesheet">
+        <link th:href="@{/css/sidebar.css}" rel="stylesheet">
+        <link th:href="@{/css/bootstrap_custom.css}" rel="stylesheet">
+
+        <!-- Bootstrap core JavaScript -->
+        <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+        <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    </head>
+
+
+    <body class="d-flex flex-column h-100">
+    <!-- Header -->
+    <header class="navbar navbar-expand-sm fixed-top bg-secondary border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand mb-0" href="#">
+                <img src="/vendor/bootstrap/images/logo_saeil.png">
+            </a>
+            <b>대구남부새일센터</b>
+
+            <!--토글 방식-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <!-- nav-underline -->
+                <ul class="navbar-nav">
+                    <!--회원 정보-->
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="#" th:text="|${#authentication.principal.name}님 안녕하세요.|"></a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('STUDENT','ADMIN')">
+                        <a class="nav-link" th:href="@{/member/student/register}">수강 과정 등록</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('TEACHER','ADMIN')">
+                        <a class="nav-link" th:href="@{/member/teacher/register}">담당 과정 등록</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- 로그아웃 post 방식 처리 Start -->
+                        <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">로그아웃</a>
+
+                        <form id="logout-form" th:action="@{/logout}" method="post">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        </form>
+                        <!-- 로그아웃 post 방식 처리 End -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!-- Header -->
+
+    <!-- Sidebar -->
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-primary" id="sidebar-wrapper">
+            <div class="list-group list-group-flush border-bottom border-secondary">
+                <a href="/member/board/list" class="list-group-item list-group-item-action bg-primary text-white">공지사항</a>
+                <a href="/member/course/list" class="list-group-item list-group-item-action bg-primary text-white">훈련과정</a>
+                <a sec:authorize="hasAnyRole('TEACHER','ADMIN')" href="/member/attendance/form" class="list-group-item list-group-item-action bg-primary text-white">출석부</a>
+                <a sec:authorize="hasAnyRole('TEACHER','ADMIN')" href="/member/training/form" class="list-group-item list-group-item-action bg-primary text-white">훈련일지</a>
+                <a href="/member/check/list" class="list-group-item list-group-item-action bg-primary text-white">사유서</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Sidebar Button-->
+        <div class="sticky-sm-top">
+            <button class="btn btn-close btn-lg menuBtn" id="menu-toggle"></button>
+        </div>
+
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <!--Content 영역-->
+            <div class="container-fluid">
+                <th:block th:replace="${content}">
+                    <!-- Page Contents -->
+                </th:block>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Menu Toggle Script -->
+    <script th:inline="javascript">
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+            $("menu-toggle")
+        });
+    </script>
+    </body>
+</th:block>
+</html>
